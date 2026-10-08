@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YudaTools — Simple Digital Tools</title>
+<meta name="description" content="YudaTools provides simple and useful digital tools for everyday use.">
+<meta name="theme-color" content="#FFD600">
+<meta property="og:title" content="YudaTools — Simple Digital Tools">
+<meta property="og:description" content="YudaTools provides simple and useful digital tools for everyday use.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yudatools.vercel.app/">
+<script>document.documentElement.className += ' js';</script>
+<style>
+/* ============================================================
+   TOKENS & RESET
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box}
+
+:root{
+  --black:#000000;
+  --white:#ffffff;
+  --yellow:#FFD600;
+  --light:#F5F5F5;
+  --dark:#222222;
+
+  --r-card:24px;
+  --r-btn:16px;
+
+  --sh-btn:4px 4px 0 #000;
+  --sh-btn-h:6px 6px 0 #000;
+  --sh-card:7px 7px 0 #000;
+  --sh-card-h:10px 10px 0 #000;
+
+  --t:180ms ease;
+}
+
+html{
+  -webkit-text-size-adjust:100%;
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  background:var(--white);
+  color:var(--black);
+  overflow-x:clip;
+  -webkit-font-smoothing:antialiased;
+}
+
+h1,h2,h3,h4,p,ul,figure{margin:0}
+ul{list-style:none;padding:0}
+a{color:inherit}
+button{font-family:inherit;font-size:inherit}
+
+.wrap{
+  width:100%;
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 20px;
+}
+
+#home,#tools,#request,#social,#about{scroll-margin-top:92px}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:14px 26px;
+  font-size:1rem;
+  font-weight:800;
+  letter-spacing:-.01em;
+  line-height:1.2;
+  text-decoration:none;
+  text-align:center;
+  color:var(--black);
+  background:var(--white);
+  border:3px solid var(--black);
+  border-radius:var(--r-btn);
+  box-shadow:var(--sh-btn);
+  cursor:pointer;
+  transition:transform var(--t),box-shadow var(--t),background-color var(--t);
+}
+.btn:hover{
+  transform:translate(-2px,-2px);
+  box-shadow:var(--sh-btn-h);
+}
+.btn:active{
+  transform:translate(2px,2px);
+  box-shadow:1px 1px 0 #000;
+}
+.btn:focus-visible{
+  outline:3px solid var(--black);
+  outline-offset:3px;
+}
+.btn-primary{background:var(--yellow)}
+.btn-secondary{background:var(--white)}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:var(--white);
+  border-bottom:3px solid var(--black);
+}
+
+.header-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  min-height:72px;
+}
+
+.logo{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color:var(--black);
+  flex:none;
+}
+.logo-mark{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:36px;
+  height:36px;
+  font-size:1.05rem;
+  font-weight:900;
+  line-height:1;
+  color:var(--black);
+  background:var(--yellow);
+  border:3px solid var(--black);
+  border-radius:11px;
+  box-shadow:3px 3px 0 var(--black);
+  flex:none;
+}
+.logo-text{
+  font-size:1.22rem;
+  font-weight:900;
+  letter-spacing:-.03em;
+}
+
+.nav ul{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.nav-link{
+  display:inline-block;
+  padding:9px 16px;
+  font-size:.95rem;
+  font-weight:700;
+  text-decoration:none;
+  color:var(--black);
+  background:transparent;
+  border:3px solid transparent;
+  border-radius:14px;
+  transition:background-color var(--t),border-color var(--t),box-shadow var(--t),transform var(--t);
+}
+.nav-link:hover{
+  background:var(--light);
+  border-color:var(--black);
+  box-shadow:3px 3px 0 var(--black);
+  transform:translate(-1px,-1px);
+}
+.nav-link.is-active{
+  background:var(--yellow);
+  border-color:var(--black);
+  box-shadow:3px 3px 0 var(--black);
+}
+
+.nav-toggle{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  width:48px;
+  height:48px;
+  padding:0;
+  background:var(--white);
+  border:3px solid var(--black);
+  border-radius:14px;
+  box-shadow:3px 3px 0 var(--black);
+  cursor:pointer;
+  flex:none;
+  transition:transform var(--t),box-shadow var(--t);
+}
+.nav-toggle:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--black)}
+.nav-toggle:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--black)}
+.nav-toggle:focus-visible{outline:3px solid var(--black);outline-offset:3px}
+.nav-toggle .bar{
+  display:block;
+  width:20px;
+  height:3px;
+  background:var(--black);
+  border-radius:2px;
+  transition:transform var(--t),opacity var(--t);
+}
+.nav-toggle[aria-expanded="true"] .bar:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-toggle[aria-expanded="true"] .bar:nth-child(2){opacity:0}
+.nav-toggle[aria-expanded="true"] .bar:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:78px 0 82px;
+  border-bottom:3px solid var(--black);
+  background:var(--white);
+}
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:radial-gradient(rgba(0,0,0,.10) 1.5px,transparent 1.5px);
+  background-size:22px 22px;
+  opacity:.5;
+  pointer-events:none;
+}
+.hero-wrap{position:relative}
+.hero-inner{
+  position:relative;
+  z-index:2;
+  max-width:620px;
+}
+
+.badge{
+  display:inline-block;
+  padding:8px 16px;
+  font-size:.72rem;
+  font-weight:900;
+  letter-spacing:.14em;
+  background:var(--white);
+  border:3px solid var(--black);
+  border-radius:999px;
+  box-shadow:4px 4px 0 var(--black);
+}
+
+.hero h1{
+  margin-top:24px;
+  font-size:clamp(2.1rem,6.2vw,3.7rem);
+  font-weight:900;
+  line-height:1.04;
+  letter-spacing:-.035em;
+}
+.hl{
+  background:linear-gradient(transparent 58%,var(--yellow) 58%);
+  padding:0 .06em;
+}
+
+.hero-sub{
+  margin-top:20px;
+  max-width:520px;
+  font-size:clamp(1rem,2vw,1.12rem);
+  font-weight:500;
+  color:var(--dark);
+}
+
+.hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-top:34px;
+}
+
+/* decorative geometric blocks */
+.hero-deco{
+  position:absolute;
+  right:0;
+  top:50%;
+  transform:translateY(-50%);
+  width:360px;
+  height:340px;
+  z-index:1;
+  pointer-events:none;
+}
+.deco{position:absolute;display:block}
+.deco-1{
+  top:0;
+  right:24px;
+  width:132px;
+  height:132px;
+  background:var(--yellow);
+  border:3px solid var(--black);
+  border-radius:28px;
+  box-shadow:8px 8px 0 var(--black);
+  transform:rotate(-9deg);
+}
+.deco-2{
+  bottom:6px;
+  left:36px;
+  width:96px;
+  height:96px;
+  background:var(--black);
+  border-radius:50%;
+}
+.deco-3{
+  top:150px;
+  right:0;
+  width:74px;
+  height:74px;
+  border:3px solid var(--black);
+  border-radius:20px;
+  background:repeating-linear-gradient(45deg,var(--yellow) 0 9px,var(--white) 9px 18px);
+  box-shadow:6px 6px 0 var(--black);
+  transform:rotate(12deg);
+}
+.deco-4{
+  top:34px;
+  left:0;
+  width:18px;
+  height:18px;
+  background:var(--black);
+  border-radius:5px;
+  transform:rotate(20deg);
+}
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+.section{
+  padding:78px 0;
+  border-bottom:3px solid var(--black);
+}
+.section-alt{background:var(--light)}
+
+.section-head{max-width:640px}
+.section-num{
+  display:inline-block;
+  padding:6px 14px;
+  font-size:.7rem;
+  font-weight:900;
+  letter-spacing:.2em;
+  color:var(--white);
+  background:var(--black);
+  border-radius:999px;
+}
+.section-head h2{
+  margin-top:16px;
+  font-size:clamp(1.75rem,4.2vw,2.5rem);
+  font-weight:900;
+  line-height:1.1;
+  letter-spacing:-.03em;
+}
+.section-head p{
+  margin-top:12px;
+  font-size:1.02rem;
+  font-weight:500;
+  color:var(--dark);
+}
+
+/* ============================================================
+   TOOL CARDS
+   ============================================================ */
+.tool-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:26px;
+  margin-top:44px;
+}
+
+.tool-card{
+  display:flex;
+  flex-direction:column;
+  padding:28px;
+  background:var(--white);
+  border:3px solid var(--black);
+  border-radius:var(--r-card);
+  box-shadow:var(--sh-card);
+  transition:transform var(--t),box-shadow var(--t);
+}
+.tool-card:hover{
+  transform:translate(-3px,-3px);
+  box-shadow:var(--sh-card-h);
+}
+
+.card-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:22px;
+}
+
+.icon-box{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:72px;
+  height:72px;
+  background:var(--light);
+  border:3px solid var(--black);
+  border-radius:20px;
+  flex:none;
+}
+.icon-box.sm{width:62px;height:62px;border-radius:18px}
+.icon-box.lg{width:84px;height:84px;border-radius:22px}
+
+.pill{
+  padding:5px 12px;
+  font-size:.66rem;
+  font-weight:900;
+  letter-spacing:.12em;
+  background:var(--yellow);
+  border:3px solid var(--black);
+  border-radius:999px;
+  box-shadow:3px 3px 0 var(--black);
+  white-space:nowrap;
+}
+
+.tool-card h3{
+  font-size:1.32rem;
+  font-weight:900;
+  letter-spacing:-.02em;
+  line-height:1.2;
+}
+.tool-card > p{
+  margin-top:10px;
+  margin-bottom:24px;
+  font-size:.96rem;
+  font-weight:500;
+  color:var(--dark);
+  flex:1 1 auto;
+}
+.tool-card .btn{
+  width:100%;
+  margin-top:auto;
+}
+.tool-card:hover .btn{background:var(--yellow)}
+
+/* ============================================================
+   REQUEST TOOLS
+   ============================================================ */
+.request-card{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:24px;
+  margin-top:40px;
+  padding:28px;
+  background:var(--white);
+  border:3px solid var(--black);
+  border-radius:26px;
+  box-shadow:var(--sh-card);
+}
+.request-body{
+  flex:1 1 240px;
+  min-width:0;
+}
+.request-body h3{
+  font-size:1.28rem;
+  font-weight:900;
+  letter-spacing:-.02em;
+}
+.wa-label{
+  margin-top:8px;
+  font-size:.88rem;
+  font-weight:700;
+  color:var(--dark);
+}
+.wa-number{
+  margin-top:2px;
+  font-size:1.16rem;
+  font-weight:900;
+  letter-spacing:-.01em;
+}
+.request-card .btn{flex:none;margin-left:auto}
+
+/* ============================================================
+   SOCIAL
+   ============================================================ */
+.social-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:26px;
+  margin-top:44px;
+}
+.social-card{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  padding:24px;
+  background:var(--white);
+  border:3px solid var(--black);
+  border-radius:var(--r-card);
+  box-shadow:var(--sh-card);
+  text-decoration:none;
+  color:var(--black);
+  transition:transform var(--t),box-shadow var(--t),background-color var(--t);
+}
+.social-card:hover{
+  transform:translate(-3px,-3px);
+  box-shadow:var(--sh-card-h);
+  background:var(--yellow);
+}
+.social-meta{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+.social-meta strong{
+  font-size:1.12rem;
+  font-weight:900;
+  letter-spacing:-.02em;
+}
+.social-meta span{
+  font-size:.9rem;
+  font-weight:600;
+  color:var(--dark);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.social-arrow{
+  margin-left:auto;
+  font-size:1.4rem;
+  font-weight:900;
+  flex:none;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer{
+  background:var(--black);
+  color:var(--white);
+  padding-top:64px;
+}
+.footer-inner{
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr;
+  gap:44px;
+  padding-bottom:52px;
+}
+.footer-brand .logo{color:var(--white)}
+.footer-brand .logo-text{color:var(--white)}
+.footer-brand p{
+  margin-top:18px;
+  max-width:300px;
+  font-size:.96rem;
+  font-weight:500;
+  color:rgba(255,255,255,.72);
+}
+.footer-col h4{
+  margin-bottom:18px;
+  font-size:.74rem;
+  font-weight:900;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--yellow);
+}
+.footer-col li + li{margin-top:11px}
+.footer-col a{
+  font-size:.95rem;
+  font-weight:600;
+  text-decoration:none;
+  color:rgba(255,255,255,.78);
+  transition:color var(--t);
+}
+.footer-col a:hover{color:var(--yellow)}
+.footer-bottom{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:22px 0;
+  border-top:1px solid rgba(255,255,255,.16);
+  font-size:.84rem;
+  font-weight:500;
+  color:rgba(255,255,255,.6);
+}
+
+/* ============================================================
+   ICONS — 100% HTML + CSS (NO SVG / IMAGE / LIBRARY)
+   ============================================================ */
+.ico{position:relative;display:block;flex:none}
+
+/* ---------- TIKTOK ---------- */
+.ico-tiktok{width:48px;height:48px}
+.ico-tiktok .tt{
+  position:absolute;
+  left:17px;
+  top:5px;
+  width:9px;
+  height:32px;
+  border-radius:5px;
+  background:currentColor;
+}
+.ico-tiktok .tt::before{          /* note head */
+  content:"";
+  position:absolute;
+  left:-14px;
+  bottom:-5px;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:currentColor;
+}
+.ico-tiktok .tt::after{           /* note flag */
+  content:"";
+  position:absolute;
+  left:5px;
+  top:0;
+  width:16px;
+  height:9px;
+  border-radius:0 6px 6px 0;
+  background:currentColor;
+}
+.ico-tiktok .tt-red{color:#FE2C55;transform:translate(3px,3px)}
+.ico-tiktok .tt-cyan{color:#25F4EE;transform:translate(-3px,-3px)}
+.ico-tiktok .tt-black{color:#000}
+
+/* ---------- INSTAGRAM ---------- */
+.ico-ig{
+  width:48px;
+  height:48px;
+  border:3px solid var(--black);
+  border-radius:15px;
+  background:linear-gradient(135deg,#FFD600 0%,#FF9A00 28%,#FF0069 62%,#7638FA 100%);
+}
+.ico-ig .ig-lens{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:21px;
+  height:21px;
+  border:3px solid #fff;
+  border-radius:50%;
+}
+.ico-ig::after{
+  content:"";
+  position:absolute;
+  top:7px;
+  right:7px;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#fff;
+}
+
+/* ---------- CROWN (AM PREMIUM) ---------- */
+.ico-crown{width:48px;height:44px}
+.ico-crown .crown-back,
+.ico-crown .crown-front{
+  position:absolute;
+  clip-path:polygon(0% 100%,0% 12%,22% 48%,50% 0%,78% 48%,100% 12%,100% 100%);
+}
+.ico-crown .crown-back{inset:0;background:var(--black)}
+.ico-crown .crown-front{inset:3px;background:var(--yellow)}
+
+/* ---------- WHATSAPP (chat bubble + handset) ---------- */
+.ico-wa{width:48px;height:48px}
+.ico-wa .wa-bubble{
+  position:absolute;
+  left:1px;
+  top:1px;
+  width:44px;
+  height:42px;
+  background:var(--yellow);
+  border:3px solid var(--black);
+  border-radius:15px;
+}
+.ico-wa .wa-bubble::after{         /* bubble tail */
+  content:"";
+  position:absolute;
+  left:6px;
+  bottom:-8px;
+  width:14px;
+  height:14px;
+  background:var(--yellow);
+  border-right:3px solid var(--black);
+  border-bottom:3px solid var(--black);
+  border-radius:0 0 3px 0;
+  transform:rotate(45deg);
+}
+.ico-wa .wa-phone{
+  position:absolute;
+  left:12px;
+  top:11px;
+  width:22px;
+  height:22px;
+}
+.ico-wa .wa-phone i{               /* handset body */
+  position:absolute;
+  left:8.5px;
+  top:3px;
+  width:5px;
+  height:16px;
+  background:var(--black);
+  border-radius:3px;
+  transform:rotate(-45deg);
+}
+.ico-wa .wa-phone::before,
+.ico-wa .wa-phone::after{          /* handset cups */
+  content:"";
+  position:absolute;
+  width:10px;
+  height:5px;
+  background:var(--black);
+  border-radius:3px;
+  transform:rotate(45deg);
+}
+.ico-wa .wa-phone::before{left:.3px;top:14.2px}
+.ico-wa .wa-phone::after{left:11.7px;top:2.8px}
+
+/* ---------- GITHUB / REPOSITORY ---------- */
+.ico-gh{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:var(--black);
+}
+.ico-gh .gh-node{
+  position:absolute;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#fff;
+}
+.ico-gh .gh-n1{left:11px;top:9px}
+.ico-gh .gh-n2{left:11px;top:29px}
+.ico-gh .gh-n3{left:27px;top:19px}
+.ico-gh .gh-line{
+  position:absolute;
+  background:#fff;
+  border-radius:2px;
+}
+.ico-gh .gh-l1{left:14px;top:18px;width:3px;height:11px}
+.ico-gh .gh-l2{left:15.5px;top:21.5px;width:14px;height:3px}
+
+/* ============================================================
+   ANIMATION
+   ============================================================ */
+@keyframes rise{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:none}
+}
+.hero-inner > *{animation:rise .55s ease both}
+.hero-inner > *:nth-child(2){animation-delay:.06s}
+.hero-inner > *:nth-child(3){animation-delay:.12s}
+.hero-inner > *:nth-child(4){animation-delay:.18s}
+
+@keyframes navIn{
+  from{opacity:0;transform:translateY(-6px)}
+  to{opacity:1;transform:none}
+}
+
+.js .reveal{opacity:0;transform:translateY(16px)}
+.js .reveal.in{
+  opacity:1;
+  transform:translateY(0);
+  transition:opacity .5s ease,transform .5s ease;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1100px){
+  .hero-deco{display:none}
+  .hero-inner{max-width:720px}
+}
+
+@media (max-width:1024px){
+  .tool-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .section{padding:68px 0}
+}
+
+@media (max-width:820px){
+  .nav-toggle{display:flex}
+
+  .nav{
+    position:absolute;
+    left:0;
+    right:0;
+    top:100%;
+    display:none;
+    background:var(--white);
+    border-bottom:3px solid var(--black);
+    box-shadow:0 8px 0 rgba(0,0,0,.06);
+    max-height:calc(100vh - 72px);
+    overflow-y:auto;
+  }
+  .nav.open{display:block;animation:navIn .18s ease both}
+  .nav ul{
+    flex-direction:column;
+    align-items:stretch;
+    gap:10px;
+    padding:16px 20px 20px;
+  }
+  .nav-link{
+    display:block;
+    padding:14px 16px;
+    background:var(--light);
+    border-color:var(--black);
+    box-shadow:none;
+  }
+  .nav-link:hover{box-shadow:none;transform:none;background:var(--yellow)}
+  .nav-link.is-active{background:var(--yellow);box-shadow:none}
+}
+
+@media (max-width:768px){
+  .section{padding:62px 0}
+  .hero{padding:60px 0 66px}
+  .footer-inner{grid-template-columns:1fr 1fr;gap:36px}
+  .footer-brand{grid-column:1 / -1}
+}
+
+@media (max-width:640px){
+  .tool-grid{grid-template-columns:minmax(0,1fr)}
+  .social-grid{grid-template-columns:minmax(0,1fr)}
+  .tool-card{padding:24px}
+  .request-card{padding:24px;flex-direction:column;align-items:flex-start}
+  .request-card .btn{margin-left:0;width:100%}
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .hero-actions .btn{width:100%}
+}
+
+@media (max-width:480px){
+  .wrap{padding:0 16px}
+  .header-inner{min-height:66px}
+  .logo-mark{width:33px;height:33px;font-size:.95rem}
+  .logo-text{font-size:1.1rem}
+  .badge{font-size:.66rem;letter-spacing:.1em;padding:7px 13px}
+  .section-num{font-size:.64rem;letter-spacing:.16em}
+  .icon-box{width:62px;height:62px;border-radius:18px}
+  .icon-box.lg{width:70px;height:70px}
+  .footer-inner{grid-template-columns:minmax(0,1fr)}
+  .footer-bottom{flex-direction:column;align-items:flex-start}
+}
+
+@media (max-width:360px){
+  .wrap{padding:0 14px}
+  .tool-card{padding:20px}
+  .request-card{padding:20px}
+  .btn{padding:13px 18px;font-size:.95rem}
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+  .js .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     01 — HEADER
+     ============================================================ -->
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="logo" href="#home" aria-label="YudaTools — home">
+      <span class="logo-mark" aria-hidden="true">Y</span>
+      <span class="logo-text">YudaTools</span>
+    </a>
+
+    <button class="nav-toggle" id="navToggle" type="button"
+            aria-label="Open menu" aria-expanded="false" aria-controls="primaryNav">
+      <span class="bar" aria-hidden="true"></span>
+      <span class="bar" aria-hidden="true"></span>
+      <span class="bar" aria-hidden="true"></span>
+    </button>
+
+    <nav class="nav" id="primaryNav" aria-label="Primary">
+      <ul>
+        <li><a class="nav-link is-active" href="#home">Home</a></li>
+        <li><a class="nav-link" href="#tools">Tools</a></li>
+        <li><a class="nav-link" href="#about">About</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============================================================
+       02 — HERO
+       ============================================================ -->
+  <section class="hero" id="home">
+    <div class="wrap hero-wrap">
+      <div class="hero-inner">
+        <span class="badge">⚡ SIMPLE • FAST • USEFUL</span>
+        <h1>Your Everyday <span class="hl">Digital Tools.</span></h1>
+        <p class="hero-sub">
+          Simple and useful tools for downloading content and
+          accessing YudaTools services.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#tools">Explore Tools →</a>
+          <a class="btn btn-secondary" href="#about">About YudaTools</a>
+        </div>
+      </div>
+
+      <div class="hero-deco" aria-hidden="true">
+        <span class="deco deco-1"></span>
+        <span class="deco deco-2"></span>
+        <span class="deco deco-3"></span>
+        <span class="deco deco-4"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       03 — TOOLS
+       ============================================================ -->
+  <section class="section" id="tools">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="section-num">01 — TOOLS</span>
+        <h2>Tools</h2>
+        <p>Useful tools made simple.</p>
+      </div>
+
+      <div class="tool-grid reveal">
+
+        <!-- TOOL 1 — TIKTOK -->
+        <article class="tool-card">
+          <div class="card-top">
+            <span class="icon-box">
+              <span class="ico ico-tiktok" aria-hidden="true">
+                <span class="tt tt-red"></span>
+                <span class="tt tt-cyan"></span>
+                <span class="tt tt-black"></span>
+              </span>
+            </span>
+            <span class="pill">POPULAR</span>
+          </div>
+          <h3>TikTok Downloader</h3>
+          <p>Download TikTok content quickly and easily.</p>
+          <a class="btn" href="https://yudatools.vercel.app/tiktok"
+             target="_blank" rel="noopener noreferrer">Open Tool →</a>
+        </article>
+
+        <!-- TOOL 2 — INSTAGRAM -->
+        <article class="tool-card">
+          <div class="card-top">
+            <span class="icon-box">
+              <span class="ico ico-ig" aria-hidden="true">
+                <span class="ig-lens"></span>
+              </span>
+            </span>
+          </div>
+          <h3>Instagram Downloader</h3>
+          <p>Download Instagram media with a simple interface.</p>
+          <a class="btn" href="https://yudatools.vercel.app/instagram"
+             target="_blank" rel="noopener noreferrer">Open Tool →</a>
+        </article>
+
+        <!-- TOOL 3 — AM PREMIUM -->
+        <article class="tool-card">
+          <div class="card-top">
+            <span class="icon-box">
+              <span class="ico ico-crown" aria-hidden="true">
+                <span class="crown-back"></span>
+                <span class="crown-front"></span>
+              </span>
+            </span>
+          </div>
+          <h3>AM Premium Generator</h3>
+          <p>Access the YudaTools AM Premium generator.</p>
+          <a class="btn" href="https://yudatools.vercel.app/amprem"
+             target="_blank" rel="noopener noreferrer">Open Tool →</a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       04 — REQUEST TOOLS
+       ============================================================ -->
+  <section class="section section-alt" id="request">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="section-num">02 — REQUEST</span>
+        <h2>Request Tools Tambahan?</h2>
+        <p>Punya ide tools yang ingin ditambahkan ke YudaTools? Kirim request langsung.</p>
+      </div>
+
+      <div class="request-card reveal">
+        <span class="icon-box lg">
+          <span class="ico ico-wa" aria-hidden="true">
+            <span class="wa-bubble"></span>
+            <span class="wa-phone"><i></i></span>
+          </span>
+        </span>
+
+        <div class="request-body">
+          <h3>Request Tools Tambahan</h3>
+          <p class="wa-label">Chat Nomer WhatsApp Ini</p>
+          <p class="wa-number">+62 896-5318-5050</p>
+        </div>
+
+        <a class="btn btn-primary" href="https://wa.me/6289653185050"
+           target="_blank" rel="noopener noreferrer">Request via WhatsApp →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       05 — SOCIAL MEDIA
+       ============================================================ -->
+  <section class="section" id="social">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="section-num">03 — SOCIAL</span>
+        <h2>Follow Yuda</h2>
+        <p>Stay connected with YudaTools.</p>
+      </div>
+
+      <div class="social-grid reveal">
+
+        <a class="social-card" href="https://www.tiktok.com/@yvdavv_"
+           target="_blank" rel="noopener noreferrer">
+          <span class="icon-box sm">
+            <span class="ico ico-tiktok" aria-hidden="true">
+              <span class="tt tt-red"></span>
+              <span class="tt tt-cyan"></span>
+              <span class="tt tt-black"></span>
+            </span>
+          </span>
+          <span class="social-meta">
+            <strong>TikTok</strong>
+            <span>@yvdavv_</span>
+          </span>
+          <span class="social-arrow" aria-hidden="true">→</span>
+        </a>
+
+        <a class="social-card" href="https://github.com/yudaaidx"
+           target="_blank" rel="noopener noreferrer">
+          <span class="icon-box sm">
+            <span class="ico ico-gh" aria-hidden="true">
+              <span class="gh-line gh-l1"></span>
+              <span class="gh-line gh-l2"></span>
+              <span class="gh-node gh-n1"></span>
+              <span class="gh-node gh-n2"></span>
+              <span class="gh-node gh-n3"></span>
+            </span>
+          </span>
+          <span class="social-meta">
+            <strong>GitHub</strong>
+            <span>@yudaaidx</span>
+          </span>
+          <span class="social-arrow" aria-hidden="true">→</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     06 — FOOTER
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+
+    <div class="footer-brand" id="about">
+      <a class="logo" href="#home" aria-label="YudaTools — home">
+        <span class="logo-mark" aria-hidden="true">Y</span>
+        <span class="logo-text">YudaTools</span>
+      </a>
+      <p>Simple tools. Built for everyone.</p>
+    </div>
+
+    <nav class="footer-col" aria-label="Footer links">
+      <h4>Links</h4>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#tools">Tools</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="https://yudatools.vercel.app/tiktok" target="_blank" rel="noopener noreferrer">TikTok Downloader</a></li>
+        <li><a href="https://yudatools.vercel.app/instagram" target="_blank" rel="noopener noreferrer">Instagram Downloader</a></li>
+        <li><a href="https://yudatools.vercel.app/amprem" target="_blank" rel="noopener noreferrer">AM Premium Generator</a></li>
+      </ul>
+    </nav>
+
+    <div class="footer-col">
+      <h4>Social</h4>
+      <ul>
+        <li><a href="https://www.tiktok.com/@yvdavv_" target="_blank" rel="noopener noreferrer">TikTok</a></li>
+        <li><a href="https://github.com/yudaaidx" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="wrap footer-bottom">
+    <p>© 2026 YudaTools. All rights reserved.</p>
+    <p>Simple tools. Built for everyone.</p>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   MOBILE NAVIGATION
+   ============================================================ */
+(function () {
+  var toggle = document.getElementById('navToggle');
+  var nav = document.getElementById('primaryNav');
+  if (!toggle || !nav) return;
+
+  function closeNav() {
+    nav.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open menu');
+  }
+
+  function openNav() {
+    nav.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.setAttribute('aria-label', 'Close menu');
+  }
+
+  toggle.addEventListener('click', function (e) {
+    e.stopPropagation();
+    if (toggle.getAttribute('aria-expanded') === 'true') {
+      closeNav();
+    } else {
+      openNav();
+    }
+  });
+
+  nav.addEventListener('click', function (e) {
+    if (e.target.closest('a')) closeNav();
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!nav.classList.contains('open')) return;
+    if (nav.contains(e.target) || toggle.contains(e.target)) return;
+    closeNav();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && nav.classList.contains('open')) {
+      closeNav();
+      toggle.focus();
+    }
+  });
+
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 820) closeNav();
+  });
+})();
+
+/* ============================================================
+   ACTIVE NAVIGATION ON SCROLL
+   ============================================================ */
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll('.nav-link'));
+  if (!links.length) return;
+
+  var pairs = links.map(function (link) {
+    var href = link.getAttribute('href') || '';
+    if (href.charAt(0) !== '#' || href.length < 2) return null;
+    var sec = document.querySelector(href);
+    return sec ? { link: link, sec: sec } : null;
+  }).filter(Boolean);
+
+  if (!pairs.length) return;
+
+  function setActive(activeLink) {
+    links.forEach(function (l) {
+      l.classList.toggle('is-active', l === activeLink);
+    });
+  }
+
+  var ticking = false;
+
+  function update() {
+    ticking = false;
+    var probe = window.pageYOffset + 140;
+    var current = pairs[0];
+    pairs.forEach(function (p) {
+      var top = p.sec.getBoundingClientRect().top + window.pageYOffset;
+      if (top <= probe) current = p;
+    });
+    if (current) setActive(current.link);
+  }
+
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(update);
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  update();
+})();
+
+/* ============================================================
+   LIGHT REVEAL ON SCROLL
+   ============================================================ */
+(function () {
+  var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  if (!els.length) return;
+
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function (el) { el.classList.add('in'); });
+    return;
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+
+  els.forEach(function (el) { io.observe(el); });
+})();
+</script>
+</body>
+</html>

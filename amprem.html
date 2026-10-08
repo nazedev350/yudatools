@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AM Premium Generator — YudaTools</title>
+<meta name="description" content="Generate Alight Motion Premium langsung dari AM API. Simple, fast, custom order ID.">
+<meta name="theme-color" content="#FFD600">
+<script>document.documentElement.className += ' js';</script>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+
+:root{
+  --black:#000;--white:#fff;--yellow:#FFD600;--light:#F5F5F5;--dark:#222;
+  --r-card:24px;--r-btn:16px;
+  --sh-btn:4px 4px 0 #000;--sh-btn-h:6px 6px 0 #000;
+  --sh-card:7px 7px 0 #000;--sh-card-h:10px 10px 0 #000;
+  --t:180ms ease;
+}
+
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:16px;line-height:1.6;
+  background:var(--white);color:var(--black);
+  overflow-x:clip;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,p,ul{margin:0}
+ul{list-style:none;padding:0}
+a{color:inherit}
+button{font-family:inherit;font-size:inherit}
+
+.wrap{width:100%;max-width:1100px;margin:0 auto;padding:0 20px}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 26px;font-size:1rem;font-weight:800;letter-spacing:-.01em;
+  line-height:1.2;text-decoration:none;text-align:center;color:var(--black);
+  background:var(--white);border:3px solid var(--black);border-radius:var(--r-btn);
+  box-shadow:var(--sh-btn);cursor:pointer;
+  transition:transform var(--t),box-shadow var(--t),background-color var(--t);
+}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:var(--sh-btn-h)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
+.btn:focus-visible{outline:3px solid var(--black);outline-offset:3px}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:var(--sh-btn)}
+.btn-primary{background:var(--yellow)}
+.btn-secondary{background:var(--white)}
+.btn-block{width:100%}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.site-header{
+  position:sticky;top:0;z-index:100;
+  background:var(--white);border-bottom:3px solid var(--black);
+}
+.header-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;min-height:72px;
+}
+.logo{
+  display:inline-flex;align-items:center;gap:10px;
+  text-decoration:none;color:var(--black);flex:none;
+}
+.logo-mark{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:36px;height:36px;font-size:1.05rem;font-weight:900;line-height:1;
+  color:var(--black);background:var(--yellow);
+  border:3px solid var(--black);border-radius:11px;
+  box-shadow:3px 3px 0 var(--black);flex:none;
+}
+.logo-text{font-size:1.22rem;font-weight:900;letter-spacing:-.03em}
+
+.header-back{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 16px;font-size:.9rem;font-weight:800;
+  text-decoration:none;color:var(--black);background:var(--white);
+  border:3px solid var(--black);border-radius:14px;
+  box-shadow:3px 3px 0 var(--black);
+  transition:transform var(--t),box-shadow var(--t),background-color var(--t);
+}
+.header-back:hover{
+  transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--black);
+  background:var(--yellow);
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  position:relative;overflow:hidden;
+  padding:64px 0 72px;
+  border-bottom:3px solid var(--black);background:var(--white);
+}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(0,0,0,.10) 1.5px,transparent 1.5px);
+  background-size:22px 22px;opacity:.5;pointer-events:none;
+}
+.hero-wrap{position:relative}
+.hero-inner{position:relative;z-index:2;max-width:640px}
+
+.badge{
+  display:inline-block;padding:8px 16px;
+  font-size:.72rem;font-weight:900;letter-spacing:.14em;
+  background:var(--white);border:3px solid var(--black);
+  border-radius:999px;box-shadow:4px 4px 0 var(--black);
+}
+.badge-live{background:var(--yellow)}
+
+.hero h1{
+  margin-top:22px;
+  font-size:clamp(2rem,5.6vw,3.2rem);
+  font-weight:900;line-height:1.05;letter-spacing:-.035em;
+}
+.hl{background:linear-gradient(transparent 58%,var(--yellow) 58%);padding:0 .06em}
+.hero-sub{
+  margin-top:18px;max-width:520px;
+  font-size:clamp(1rem,2vw,1.1rem);font-weight:500;color:var(--dark);
+}
+.hero-meta{
+  display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;
+}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:7px 14px;font-size:.74rem;font-weight:900;letter-spacing:.1em;
+  background:var(--white);border:3px solid var(--black);
+  border-radius:999px;box-shadow:3px 3px 0 var(--black);
+}
+.chip.dark{background:var(--black);color:var(--yellow)}
+.chip .dot{
+  width:10px;height:10px;border-radius:50%;
+  background:#00C853;border:2px solid var(--black);
+  animation:pulse 1.8s infinite;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(0,200,83,.5)}
+  70%{box-shadow:0 0 0 8px rgba(0,200,83,0)}
+  100%{box-shadow:0 0 0 0 rgba(0,200,83,0)}
+}
+
+.hero-deco{
+  position:absolute;right:0;top:50%;transform:translateY(-50%);
+  width:320px;height:320px;z-index:1;pointer-events:none;
+}
+.deco{position:absolute;display:block}
+.deco-1{
+  top:0;right:24px;width:120px;height:120px;
+  background:var(--yellow);border:3px solid var(--black);
+  border-radius:28px;box-shadow:8px 8px 0 var(--black);
+  transform:rotate(-9deg);
+}
+.deco-2{
+  bottom:6px;left:36px;width:88px;height:88px;
+  background:var(--black);border-radius:50%;
+}
+.deco-3{
+  top:150px;right:0;width:66px;height:66px;
+  border:3px solid var(--black);border-radius:20px;
+  background:repeating-linear-gradient(45deg,var(--yellow) 0 9px,var(--white) 9px 18px);
+  box-shadow:6px 6px 0 var(--black);transform:rotate(12deg);
+}
+
+/* ============================================================
+   MAIN SECTION
+   ============================================================ */
+.section{padding:64px 0}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1.15fr;
+  gap:26px;
+  align-items:start;
+}
+
+.card{
+  padding:28px;background:var(--white);
+  border:3px solid var(--black);border-radius:var(--r-card);
+  box-shadow:var(--sh-card);
+}
+
+.card-title{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:22px;
+}
+.card-title .ico-box{
+  display:flex;align-items:center;justify-content:center;
+  width:52px;height:52px;background:var(--light);
+  border:3px solid var(--black);border-radius:16px;flex:none;
+}
+.card-title h2{font-size:1.35rem;font-weight:900;letter-spacing:-.02em}
+
+/* ---------- STEPS INFO ---------- */
+.steps{display:flex;flex-direction:column;gap:18px}
+.steps li{display:flex;gap:14px;align-items:flex-start}
+.steps .n{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:34px;height:34px;font-size:.85rem;font-weight:900;
+  background:var(--yellow);border:3px solid var(--black);
+  border-radius:11px;box-shadow:2px 2px 0 var(--black);flex:none;
+}
+.steps strong{display:block;font-size:.98rem;font-weight:900;letter-spacing:-.01em}
+.steps p{margin-top:3px;font-size:.86rem;font-weight:500;color:var(--dark);line-height:1.5}
+
+.note{
+  display:flex;gap:12px;align-items:flex-start;
+  margin-top:26px;padding-top:22px;border-top:3px dashed var(--black);
+}
+.note .dot-b{
+  width:12px;height:12px;margin-top:5px;
+  background:var(--black);border-radius:50%;flex:none;
+}
+.note p{font-size:.82rem;font-weight:600;color:var(--dark);line-height:1.55}
+
+/* ---------- FORM ---------- */
+.step{display:block}
+.step.hidden{display:none}
+
+.step-head{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:20px;flex-wrap:wrap;
+}
+.step-badge{
+  padding:6px 12px;font-size:.66rem;font-weight:900;letter-spacing:.14em;
+  background:var(--black);color:var(--yellow);border-radius:999px;
+}
+.step-head h3{font-size:1.2rem;font-weight:900;letter-spacing:-.02em}
+
+label.lbl{
+  display:block;font-size:.74rem;font-weight:900;
+  letter-spacing:.12em;text-transform:uppercase;margin-bottom:9px;
+}
+.input{
+  display:block;width:100%;padding:14px 16px;
+  font-family:inherit;font-size:1rem;font-weight:600;
+  color:var(--black);background:var(--white);
+  border:3px solid var(--black);border-radius:14px;
+  box-shadow:3px 3px 0 var(--black);
+  transition:box-shadow var(--t),transform var(--t);outline:none;
+}
+.input::placeholder{color:#9a9a9a;font-weight:500}
+.input:focus{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--black)}
+textarea.input{
+  min-height:112px;resize:vertical;
+  line-height:1.5;font-size:.94rem;word-break:break-all;
+}
+
+.form-btn{margin-top:16px}
+.form-btn.secondary{margin-top:10px;background:var(--white)}
+
+.hint{
+  margin-top:14px;font-size:.82rem;font-weight:600;
+  color:var(--dark);line-height:1.55;
+}
+
+/* ---------- STATUS ---------- */
+.status{
+  margin-top:22px;padding:18px 20px;
+  border:3px solid var(--black);border-radius:16px;
+  box-shadow:3px 3px 0 var(--black);
+  font-size:.92rem;font-weight:600;line-height:1.55;
+  word-break:break-word;
+}
+.status[hidden]{display:none}
+.status.loading{background:var(--light)}
+.status.error{background:#FFE4E4}
+.status.success{background:var(--yellow)}
+.status strong{display:block;font-weight:900;margin-bottom:6px;font-size:1rem}
+.order-id{
+  display:inline-block;margin-top:10px;padding:7px 12px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.8rem;font-weight:700;
+  background:var(--black);color:var(--yellow);border-radius:8px;
+  word-break:break-all;max-width:100%;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer{
+  background:var(--black);color:var(--white);
+  padding:40px 0;margin-top:20px;
+}
+.footer-inner{
+  display:flex;flex-wrap:wrap;align-items:center;
+  justify-content:space-between;gap:18px;
+}
+.footer-brand{display:flex;flex-direction:column;gap:6px}
+.footer-brand .logo{color:var(--white)}
+.footer-brand .logo-text{color:var(--white)}
+.footer-brand p{
+  font-size:.9rem;font-weight:500;color:rgba(255,255,255,.7);
+}
+.footer-links{
+  display:flex;flex-wrap:wrap;gap:14px;
+}
+.footer-links a{
+  padding:9px 14px;font-size:.86rem;font-weight:700;
+  text-decoration:none;color:var(--white);
+  border:3px solid var(--white);border-radius:12px;
+  transition:background-color var(--t),color var(--t),transform var(--t);
+}
+.footer-links a:hover{
+  background:var(--yellow);color:var(--black);border-color:var(--yellow);
+  transform:translate(-1px,-1px);
+}
+
+/* ============================================================
+   CUSTOM CSS ICONS (NO SVG / IMAGE / LIBRARY)
+   ============================================================ */
+.ico{position:relative;display:block;flex:none}
+
+/* crown */
+.ico-crown{width:34px;height:32px}
+.ico-crown .back,
+.ico-crown .front{
+  position:absolute;
+  clip-path:polygon(0% 100%,0% 12%,22% 48%,50% 0%,78% 48%,100% 12%,100% 100%);
+}
+.ico-crown .back{inset:0;background:var(--black)}
+.ico-crown .front{inset:2px;background:var(--yellow)}
+
+/* lock (shield) */
+.ico-lock{width:34px;height:32px}
+.ico-lock .shackle{
+  position:absolute;left:50%;top:0;transform:translateX(-50%);
+  width:18px;height:14px;
+  border:3px solid var(--black);border-bottom:none;
+  border-radius:10px 10px 0 0;
+}
+.ico-lock .body{
+  position:absolute;left:0;right:0;bottom:0;height:20px;
+  background:var(--yellow);border:3px solid var(--black);border-radius:6px;
+}
+.ico-lock .body::after{
+  content:"";position:absolute;left:50%;top:6px;transform:translateX(-50%);
+  width:5px;height:7px;background:var(--black);border-radius:2px;
+}
+
+/* bolt (fast) */
+.ico-bolt{width:32px;height:34px}
+.ico-bolt .b{
+  position:absolute;inset:0;
+  background:var(--black);
+  clip-path:polygon(55% 0%,20% 55%,48% 55%,40% 100%,85% 42%,55% 42%);
+}
+
+/* WhatsApp-style (chat + phone) */
+.ico-wa{width:32px;height:32px}
+.ico-wa .bubble{
+  position:absolute;left:1px;top:1px;width:28px;height:26px;
+  background:var(--yellow);border:3px solid var(--black);border-radius:10px;
+}
+.ico-wa .bubble::after{
+  content:"";position:absolute;left:4px;bottom:-6px;
+  width:10px;height:10px;background:var(--yellow);
+  border-right:3px solid var(--black);border-bottom:3px solid var(--black);
+  border-radius:0 0 2px 0;transform:rotate(45deg);
+}
+.ico-wa .phone{
+  position:absolute;left:9px;top:8px;width:14px;height:14px;
+}
+.ico-wa .phone i{
+  position:absolute;left:5.5px;top:1.5px;
+  width:3px;height:11px;background:var(--black);
+  border-radius:2px;transform:rotate(-45deg);
+}
+.ico-wa .phone::before,
+.ico-wa .phone::after{
+  content:"";position:absolute;width:7px;height:3.5px;
+  background:var(--black);border-radius:2px;transform:rotate(45deg);
+}
+.ico-wa .phone::before{left:0;top:9px}
+.ico-wa .phone::after{left:7.5px;top:1.5px}
+
+/* ============================================================
+   ANIMATION
+   ============================================================ */
+@keyframes rise{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:none}
+}
+.hero-inner > *{animation:rise .55s ease both}
+.hero-inner > *:nth-child(2){animation-delay:.06s}
+.hero-inner > *:nth-child(3){animation-delay:.12s}
+.hero-inner > *:nth-child(4){animation-delay:.18s}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:900px){
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .hero-deco{display:none}
+  .hero-inner{max-width:720px}
+}
+
+@media (max-width:640px){
+  .wrap{padding:0 16px}
+  .section{padding:52px 0}
+  .hero{padding:52px 0 60px}
+  .card{padding:22px}
+  .header-back{padding:8px 12px;font-size:.82rem}
+}
+
+@media (max-width:420px){
+  .wrap{padding:0 14px}
+  .header-inner{min-height:66px}
+  .logo-mark{width:33px;height:33px;font-size:.95rem}
+  .logo-text{font-size:1.1rem}
+  .card{padding:18px}
+  .btn{padding:13px 18px;font-size:.95rem}
+  .card-title h2{font-size:1.18rem}
+  .card-title .ico-box{width:46px;height:46px}
+  .step-head h3{font-size:1.1rem}
+}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="logo" href="https://yudatools.vercel.app/" aria-label="YudaTools — home">
+      <span class="logo-mark" aria-hidden="true">Y</span>
+      <span class="logo-text">YudaTools</span>
+    </a>
+    <a class="header-back" href="https://yudatools.vercel.app/">
+      ← Back to YudaTools
+    </a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <section class="hero">
+    <div class="wrap hero-wrap">
+      <div class="hero-inner">
+        <span class="badge badge-live">⚡ LIVE TOOL</span>
+        <h1>AM Premium <span class="hl">Generator.</span></h1>
+        <p class="hero-sub">
+          Alight Motion Premium langsung dari AM-nya.
+          Simple, cepat, dan tanpa ribet.
+        </p>
+        <div class="hero-meta">
+          <span class="chip"><span class="dot" aria-hidden="true"></span> LIVE • AM API v585</span>
+          <span class="chip dark">🔒 END-TO-END</span>
+        </div>
+      </div>
+
+      <div class="hero-deco" aria-hidden="true">
+        <span class="deco deco-1"></span>
+        <span class="deco deco-2"></span>
+        <span class="deco deco-3"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       MAIN
+       ============================================================ -->
+  <section class="section">
+    <div class="wrap">
+      <div class="grid">
+
+        <!-- INFO CARD -->
+        <aside class="card">
+          <div class="card-title">
+            <span class="ico-box">
+              <span class="ico ico-bolt" aria-hidden="true"><span class="b"></span></span>
+            </span>
+            <h2>Cara Pakai</h2>
+          </div>
+
+          <ol class="steps">
+            <li>
+              <span class="n">1</span>
+              <div>
+                <strong>Masukkan email</strong>
+                <p>Email Google / Gmail yang akan dijadikan premium.</p>
+              </div>
+            </li>
+            <li>
+              <span class="n">2</span>
+              <div>
+                <strong>Kirim link verifikasi</strong>
+                <p>Kami kirim magic link ke inbox email kamu.</p>
+              </div>
+            </li>
+            <li>
+              <span class="n">3</span>
+              <div>
+                <strong>Tempel link & verifikasi</strong>
+                <p>Copy link dari email, tempel di kolom Step 2.</p>
+              </div>
+            </li>
+            <li>
+              <span class="n">4</span>
+              <div>
+                <strong>Premium aktif</strong>
+                <p>Order ID tergenerate otomatis.</p>
+              </div>
+            </li>
+          </ol>
+
+          <div class="note">
+            <span class="dot-b" aria-hidden="true"></span>
+            <p>Proses berjalan langsung dari AM API. Tidak ada data yang disimpan di server YudaTools.</p>
+          </div>
+        </aside>
+
+        <!-- FORM CARD -->
+        <div class="card">
+
+          <!-- STEP 1 -->
+          <div class="step" id="step1">
+            <div class="step-head">
+              <span class="step-badge">STEP 1</span>
+              <h3>Masukkan Email</h3>
+            </div>
+            <label class="lbl" for="email">Email Google</label>
+            <input class="input" id="email" type="email"
+                   placeholder="user@gmail.com"
+                   autocomplete="email" spellcheck="false" />
+            <button class="btn btn-primary btn-block form-btn" id="sendLink" type="button">
+              Send Verification Link →
+            </button>
+            <p class="hint">Link akan dikirim ke inbox kamu. Cek juga folder spam.</p>
+          </div>
+
+          <!-- STEP 2 -->
+          <div class="step hidden" id="step2">
+            <div class="step-head">
+              <span class="step-badge">STEP 2</span>
+              <h3>Tempel Link Verifikasi</h3>
+            </div>
+            <label class="lbl" for="link">Link dari email</label>
+            <textarea class="input" id="link"
+                      placeholder="https://alightcreative.com/...oobCode=..."
+                      spellcheck="false"></textarea>
+            <button class="btn btn-primary btn-block form-btn" id="verify" type="button">
+              Verify & Activate Premium →
+            </button>
+            <button class="btn btn-block form-btn secondary" id="reset" type="button">
+              ← Ganti Email
+            </button>
+          </div>
+
+          <!-- STATUS -->
+          <div class="status" id="status" hidden aria-live="polite"></div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <a class="logo" href="https://yudatools.vercel.app/">
+        <span class="logo-mark" aria-hidden="true">Y</span>
+        <span class="logo-text">YudaTools</span>
+      </a>
+      <p>Simple tools. Built for everyone.</p>
+    </div>
+    <div class="footer-links">
+      <a href="https://wa.me/6289653185050" target="_blank" rel="noopener noreferrer">
+        Request via WhatsApp →
+      </a>
+      <a href="https://yudatools.vercel.app/" target="_blank" rel="noopener noreferrer">
+        Homepage
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   AM PREMIUM — client-side implementation of the plugin
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var KEY = 'AIzaSyDtG1AU22ErnQD60AzBAcaknySiz9_CEq0';
+  var IDT = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty';
+  var VFY = 'https://us-central1-alight-creative.cloudfunctions.net/verifyPurchase';
+
+  var FIID = 'cSDnCyp3T-uwp07z3tL86T:APA91bFkmvvsHw5nnqa1SBFci-99DRsKClLiETdRrVcJjS5yBx1v_FbCb1d8WhBuea_zmwnYBktyTIzcRhN4b6uNOUur9wPc0gKXmJDoZic0LhNq5V2s0xI';
+  var PROD_TOKEN = 'mmgaobamlahbbeccfplmbkbb.AO-J1OzqG0or_GJJIx-ms8GrTm-jaglCRfhQSRPUZKpl2YspYS-oN7_94uv8RC5vQbvd_Ios2pPDStZ2n7F0hLE3FiOU7HS3R6Fquulv5xLXFECSv4ctElw';
+
+  var ANDROID_HEADERS = {
+    'x-android-package': 'com.alightcreative.motion',
+    'x-android-cert': 'ECA6BF91B8715A6F810ED0BBFC65B6CD578F52A8'
+  };
+
+  var $ = function (s) { return document.querySelector(s); };
+
+  var els = {
+    step1:  $('#step1'),
+    step2:  $('#step2'),
+    email:  $('#email'),
+    link:   $('#link'),
+    send:   $('#sendLink'),
+    verify: $('#verify'),
+    reset:  $('#reset'),
+    status: $('#status')
+  };
+
+  if (!els.step1 || !els.send || !els.verify || !els.status) return;
+
+  var state = { email: '' };
+
+  /* ---------- helpers ---------- */
+
+  function isEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+    });
+  }
+
+  function randomHex(bytes){
+    var a = new Uint8Array(bytes);
+    if (window.crypto && window.crypto.getRandomValues) {
+      window.crypto.getRandomValues(a);
+    } else {
+      for (var i = 0; i < bytes; i++) a[i] = Math.floor(Math.random() * 256);
+    }
+    var out = '';
+    for (var j = 0; j < a.length; j++) out += ('0' + a[j].toString(16)).slice(-2);
+    return out;
+  }
+
+  function showStatus(type, html){
+    els.status.className = 'status ' + type;
+    els.status.innerHTML = html;
+    els.status.hidden = false;
+  }
+  function hideStatus(){
+    els.status.hidden = true;
+    els.status.className = 'status';
+    els.status.innerHTML = '';
+  }
+  function setLoading(btn, on, txt){
+    if (!btn) return;
+    if (on){
+      if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+      btn.textContent = txt || 'Processing...';
+      btn.disabled = true;
+    } else {
+      if (btn.dataset.orig) btn.textContent = btn.dataset.orig;
+      btn.disabled = false;
+    }
+  }
+
+  async function api(url, body, headers){
+    var res = await fetch(url, {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-store',
+      headers: Object.assign({ 'content-type': 'application/json' }, headers || {}),
+      body: JSON.stringify(body)
+    });
+    var text = await res.text();
+    var data;
+    try { data = JSON.parse(text); } catch (e) { data = text; }
+    if (!res.ok){
+      var msg = (data && typeof data === 'object')
+        ? (data.error && data.error.message ? data.error.message : JSON.stringify(data))
+        : String(data);
+      throw new Error(msg || ('HTTP ' + res.status));
+    }
+    return data;
+  }
+
+  /* ---------- plugin logic ---------- */
+
+  async function sendVerificationLink(email){
+    await api(IDT + '/createAuthUri?key=' + encodeURIComponent(KEY), {
+      identifier: email,
+      continueUri: 'http://localhost'
+    }, ANDROID_HEADERS);
+
+    return api(IDT + '/getOobConfirmationCode?key=' + encodeURIComponent(KEY), {
+      requestType: 6,
+      email: email,
+      androidInstallApp: true,
+      canHandleCodeInApp: true,
+      continueUrl: 'https://alightcreative.com?ui_sid=0366624874&ui_sd=0',
+      iosBundleId: 'com.alightcreative.motion',
+      androidPackageName: 'com.alightcreative.motion',
+      androidMinimumVersion: '585',
+      clientType: 'CLIENT_TYPE_ANDROID'
+    }, ANDROID_HEADERS);
+  }
+
+  function extractOobCode(raw){
+    if (!raw) return null;
+    var s = String(raw).replace(/&amp;/g, '&');
+    try { s = decodeURIComponent(s); } catch (e) {}
+
+    try {
+      var u = new URL(s);
+      var c = u.searchParams.get('oobCode');
+      if (!c){
+        var n = u.searchParams.get('link') || u.searchParams.get('q') || u.searchParams.get('url');
+        if (n){
+          try { c = new URL(n).searchParams.get('oobCode'); }
+          catch (e){
+            var mm = n.match(/[?&]oobCode=([a-zA-Z0-9_-]+)/i);
+            if (mm) c = mm[1];
+          }
+        }
+      }
+      if (c) return c.replace(/[^a-zA-Z0-9_-]/g, '');
+    } catch (e) {}
+
+    var m = s.match(/oobCode[=%3D]+([a-zA-Z0-9_-]+)/i);
+    if (m) return m[1];
+
+    var t = raw.trim();
+    if (/^[a-zA-Z0-9_-]{10,}$/.test(t) && t.indexOf('://') === -1) return t;
+
+    return null;
+  }
+
+  async function signInWithEmailLink(email, link){
+    var code = extractOobCode(link);
+    if (!code) throw new Error('Kode oobCode tidak ditemukan di link.');
+    return api(IDT + '/emailLinkSignin?key=' + encodeURIComponent(KEY), {
+      email: email,
+      oobCode: code,
+      clientType: 'CLIENT_TYPE_ANDROID'
+    }, ANDROID_HEADERS);
+  }
+
+  async function activatePremium(idToken){
+    var orderId = 'yuda-' + randomHex(6);
+    var data = await api(VFY, {
+      data: {
+        productId: 'am.full.sub.annual.19q4',
+        token: PROD_TOKEN,
+        skuType: 'subs',
+        orderId: orderId
+      }
+    }, {
+      'content-type': 'application/json; charset=utf-8',
+      'authorization': 'Bearer ' + idToken,
+      'firebase-instance-id-token': FIID
+    });
+    return { orderId: orderId, data: data };
+  }
+
+  /* ---------- UI handlers ---------- */
+
+  els.send.addEventListener('click', async function () {
+    var email = (els.email.value || '').trim();
+    if (!isEmail(email)){
+      showStatus('error', '<strong>Email tidak valid</strong>Masukkan alamat email Google yang benar.');
+      els.email.focus();
+      return;
+    }
+    hideStatus();
+    setLoading(els.send, true, 'Mengirim link...');
+    try {
+      await sendVerificationLink(email);
+      state.email = email;
+      els.step1.classList.add('hidden');
+      els.step2.classList.remove('hidden');
+      showStatus('loading',
+        '<strong>✅ Link terkirim!</strong>' +
+        'Cek inbox atau folder spam <b>' + esc(email) + '</b>, lalu copy link verifikasi dan tempel di kolom Step 2.'
+      );
+      els.link.focus();
+    } catch (e) {
+      showStatus('error', '<strong>Gagal mengirim link</strong>' + esc(e && e.message ? e.message : String(e)));
+    } finally {
+      setLoading(els.send, false);
+    }
+  });
+
+  els.verify.addEventListener('click', async function () {
+    var link = (els.link.value || '').trim();
+    if (!link){
+      showStatus('error', '<strong>Link kosong</strong>Tempel link verifikasi dari email kamu.');
+      els.link.focus();
+      return;
+    }
+    if (!state.email){
+      showStatus('error', '<strong>Email belum diisi</strong>Ulangi dari Step 1.');
+      return;
+    }
+    hideStatus();
+    setLoading(els.verify, true, 'Memverifikasi...');
+    showStatus('loading', '<strong>Memverifikasi...</strong>Menghubungkan ke Alight Motion.');
+    try {
+      var auth = await signInWithEmailLink(state.email, link);
+      showStatus('loading', '<strong>Login berhasil!</strong>Mempromosikan akun ke Premium...');
+      var result = await activatePremium(auth.idToken);
+      showStatus('success',
+        '<strong>✅ PREMIUM SUCCESS!</strong>' +
+        '📧 Email: ' + esc(state.email) + '<br>' +
+        '📅 Status: Active' +
+        '<span class="order-id">Order ID: ' + esc(result.orderId) + '</span>'
+      );
+    } catch (e) {
+      showStatus('error', '<strong>Gagal</strong>' + esc(e && e.message ? e.message : String(e)));
+    } finally {
+      setLoading(els.verify, false);
+    }
+  });
+
+  els.reset.addEventListener('click', function () {
+    els.step2.classList.add('hidden');
+    els.step1.classList.remove('hidden');
+    els.link.value = '';
+    hideStatus();
+    els.email.focus();
+  });
+
+  els.email.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter'){ e.preventDefault(); els.send.click(); }
+  });
+})();
+</script>
+</body>
+</html>
