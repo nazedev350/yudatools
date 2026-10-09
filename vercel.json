@@ -2,6 +2,7 @@
   "cleanUrls": true,
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
-    { "source": "/amprem", "destination": "/amprem.html" }
+    { "source": "/amprem", "destination": "/amprem.html" },
+    { "source": "/nekopoi", "destination": "/nekopoi.html"}
   ]
 }
