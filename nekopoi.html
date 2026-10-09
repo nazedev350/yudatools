@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nekopoi — Search & Stream | YudaTools</title>
+<meta name="description" content="Search, detail, dan streaming Nekopoi dengan Playmogo Player. Simple, cepat, tanpa ribet.">
+<meta name="theme-color" content="#FFD600">
+<script>document.documentElement.className += ' js';</script>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+
+:root{
+  --black:#000;--white:#fff;--yellow:#FFD600;--light:#F5F5F5;--dark:#222;
+  --r-card:24px;--r-btn:16px;
+  --sh-btn:4px 4px 0 #000;--sh-btn-h:6px 6px 0 #000;
+  --sh-card:7px 7px 0 #000;--sh-card-h:10px 10px 0 #000;
+  --t:180ms ease;
+}
+
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:16px;line-height:1.6;
+  background:var(--white);color:var(--black);
+  overflow-x:clip;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,p,ul,ol{margin:0}
+ul,ol{list-style:none;padding:0}
+a{color:inherit}
+button{font-family:inherit;font-size:inherit}
+img{max-width:100%;display:block}
+
+.wrap{width:100%;max-width:1200px;margin:0 auto;padding:0 20px}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 26px;font-size:1rem;font-weight:800;letter-spacing:-.01em;
+  line-height:1.2;text-decoration:none;text-align:center;color:var(--black);
+  background:var(--white);border:3px solid var(--black);border-radius:var(--r-btn);
+  box-shadow:var(--sh-btn);cursor:pointer;
+  transition:transform var(--t),box-shadow var(--t),background-color var(--t);
+}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:var(--sh-btn-h)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
+.btn:focus-visible{outline:3px solid var(--black);outline-offset:3px}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:var(--sh-btn)}
+.btn-primary{background:var(--yellow)}
+.btn-secondary{background:var(--white)}
+.btn-sm{padding:10px 16px;font-size:.88rem;border-radius:12px;box-shadow:3px 3px 0 #000}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.site-header{
+  position:sticky;top:0;z-index:100;
+  background:var(--white);border-bottom:3px solid var(--black);
+}
+.header-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;min-height:72px;
+}
+.logo{
+  display:inline-flex;align-items:center;gap:10px;
+  text-decoration:none;color:var(--black);flex:none;
+}
+.logo-mark{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:36px;height:36px;font-size:1.05rem;font-weight:900;line-height:1;
+  color:var(--black);background:var(--yellow);
+  border:3px solid var(--black);border-radius:11px;
+  box-shadow:3px 3px 0 var(--black);flex:none;
+}
+.logo-text{font-size:1.22rem;font-weight:900;letter-spacing:-.03em}
+
+.header-back{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 16px;font-size:.9rem;font-weight:800;
+  text-decoration:none;color:var(--black);background:var(--white);
+  border:3px solid var(--black);border-radius:14px;
+  box-shadow:3px 3px 0 var(--black);
+  transition:transform var(--t),box-shadow var(--t),background-color var(--t);
+}
+.header-back:hover{
+  transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--black);
+  background:var(--yellow);
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  position:relative;overflow:hidden;
+  padding:56px 0 60px;
+  border-bottom:3px solid var(--black);background:var(--white);
+}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(0,0,0,.10) 1.5px,transparent 1.5px);
+  background-size:22px 22px;opacity:.5;pointer-events:none;
+}
+.hero-wrap{position:relative}
+.hero-inner{position:relative;z-index:2;max-width:680px}
+
+.badge{
+  display:inline-block;padding:8px 16px;
+  font-size:.72rem;font-weight:900;letter-spacing:.14em;
+  background:var(--white);border:3px solid var(--black);
+  border-radius:999px;box-shadow:4px 4px 0 var(--black);
+}
+.badge-live{background:var(--yellow)}
+
+.hero h1{
+  margin-top:22px;
+  font-size:clamp(2rem,5.6vw,3.2rem);
+  font-weight:900;line-height:1.05;letter-spacing:-.035em;
+}
+.hl{background:linear-gradient(transparent 58%,var(--yellow) 58%);padding:0 .06em}
+.hero-sub{
+  margin-top:16px;max-width:560px;
+  font-size:clamp(1rem,2vw,1.08rem);font-weight:500;color:var(--dark);
+}
+.hero-meta{
+  display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;
+}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:7px 14px;font-size:.74rem;font-weight:900;letter-spacing:.1em;
+  background:var(--white);border:3px solid var(--black);
+  border-radius:999px;box-shadow:3px 3px 0 var(--black);
+}
+.chip.dark{background:var(--black);color:var(--yellow)}
+.chip .dot{
+  width:10px;height:10px;border-radius:50%;
+  background:#00C853;border:2px solid var(--black);
+  animation:pulse 1.8s infinite;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(0,200,83,.5)}
+  70%{box-shadow:0 0 0 8px rgba(0,200,83,0)}
+  100%{box-shadow:0 0 0 0 rgba(0,200,83,0)}
+}
+
+.hero-deco{
+  position:absolute;right:0;top:50%;transform:translateY(-50%);
+  width:320px;height:320px;z-index:1;pointer-events:none;
+}
+.deco{position:absolute;display:block}
+.deco-1{
+  top:0;right:24px;width:120px;height:120px;
+  background:var(--yellow);border:3px solid var(--black);
+  border-radius:28px;box-shadow:8px 8px 0 var(--black);
+  transform:rotate(-9deg);
+}
+.deco-2{
+  bottom:6px;left:36px;width:88px;height:88px;
+  background:var(--black);border-radius:50%;
+}
+.deco-3{
+  top:150px;right:0;width:66px;height:66px;
+  border:3px solid var(--black);border-radius:20px;
+  background:repeating-linear-gradient(45deg,var(--yellow) 0 9px,var(--white) 9px 18px);
+  box-shadow:6px 6px 0 var(--black);transform:rotate(12deg);
+}
+
+/* ============================================================
+   SECTION
+   ============================================================ */
+.section{padding:56px 0}
+.section + .section{border-top:3px solid var(--black)}
+
+.section-head{max-width:640px;margin-bottom:20px}
+.section-num{
+  display:inline-block;padding:5px 12px;
+  font-size:.66rem;font-weight:900;letter-spacing:.2em;
+  color:var(--white);background:var(--black);border-radius:999px;
+}
+.section-num.num-live{background:var(--yellow);color:var(--black);border:3px solid var(--black);box-shadow:3px 3px 0 var(--black)}
+.section-head h2{
+  margin-top:12px;
+  font-size:clamp(1.4rem,3.2vw,1.9rem);
+  font-weight:900;line-height:1.1;letter-spacing:-.03em;
+}
+.section-head p{
+  margin-top:8px;font-size:.9rem;font-weight:500;color:var(--dark);
+}
+
+/* ============================================================
+   SEARCH FORM (COMPACT)
+   ============================================================ */
+.search-form{
+  display:flex;flex-wrap:wrap;gap:8px;
+  padding:12px;
+  background:var(--white);border:3px solid var(--black);
+  border-radius:18px;box-shadow:5px 5px 0 var(--black);
+  max-width:720px;
+}
+.search-input{
+  flex:1 1 200px;min-width:0;
+  padding:10px 14px;
+  font-family:inherit;font-size:.9rem;font-weight:600;
+  color:var(--black);background:var(--white);
+  border:3px solid var(--black);border-radius:11px;
+  box-shadow:2px 2px 0 var(--black);
+  transition:box-shadow var(--t),transform var(--t);
+  outline:none;
+}
+.search-input::placeholder{color:#9a9a9a;font-weight:500}
+.search-input:focus{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--black)}
+.search-form .btn{
+  flex:none;
+  padding:10px 20px;
+  font-size:.88rem;
+  border-radius:11px;
+  box-shadow:2px 2px 0 var(--black);
+}
+.search-form .btn:hover{box-shadow:4px 4px 0 var(--black)}
+
+/* ============================================================
+   STATUS (COMPACT)
+   ============================================================ */
+.status{
+  margin-top:14px;padding:11px 14px;
+  border:3px solid var(--black);border-radius:12px;
+  box-shadow:2px 2px 0 var(--black);
+  font-size:.82rem;font-weight:600;line-height:1.5;
+  word-break:break-word;
+  max-width:720px;
+}
+.status[hidden]{display:none}
+.status.loading{background:var(--light)}
+.status.error{background:#FFE4E4}
+.status.success{background:var(--yellow)}
+.status strong{display:block;font-weight:900;margin-bottom:3px;font-size:.86rem}
+.status code{
+  display:inline-block;padding:1px 7px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.76rem;background:var(--black);color:var(--yellow);
+  border-radius:5px;
+}
+
+/* ============================================================
+   RESULTS LIST
+   ============================================================ */
+.results-list{
+  display:flex;flex-direction:column;gap:10px;
+  margin-top:22px;
+}
+.result-card{
+  display:flex;align-items:stretch;gap:0;
+  background:var(--white);
+  border:3px solid var(--black);border-radius:16px;
+  box-shadow:4px 4px 0 var(--black);
+  overflow:hidden;
+  color:var(--black);
+  transition:transform var(--t),box-shadow var(--t);
+  cursor:pointer;
+  text-align:left;
+  padding:0;
+  font-family:inherit;
+  width:100%;
+}
+.result-card:hover{
+  transform:translate(-3px,-3px);
+  box-shadow:7px 7px 0 var(--black);
+  background:var(--yellow);
+}
+.result-thumb{
+  position:relative;
+  flex:0 0 100px;
+  width:100px;
+  min-height:92px;
+  background:var(--light);
+  border-right:3px solid var(--black);
+  overflow:hidden;
+}
+.result-thumb img{
+  width:100%;height:100%;object-fit:cover;
+  display:block;position:absolute;inset:0;
+}
+.result-thumb .fallback{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;font-weight:900;color:var(--dark);
+  background:repeating-linear-gradient(45deg,var(--light) 0 10px,#eaeaea 10px 20px);
+}
+.result-body{
+  flex:1 1 auto;min-width:0;
+  padding:12px 16px;
+  display:flex;flex-direction:column;gap:6px;
+  justify-content:center;
+}
+.result-title{
+  font-size:.8rem;
+  font-weight:800;
+  letter-spacing:-.005em;
+  line-height:1.4;
+  word-break:break-word;
+  color:var(--black);
+}
+.result-meta{
+  display:flex;flex-wrap:wrap;gap:5px;
+}
+.tag{
+  padding:2px 8px;font-size:.56rem;font-weight:900;letter-spacing:.06em;
+  background:var(--light);border:2px solid var(--black);border-radius:999px;
+  text-transform:uppercase;
+}
+.tag.y{background:var(--yellow)}
+.result-card:hover .tag{background:var(--white)}
+.result-card:hover .tag.y{background:var(--white)}
+.result-arrow{
+  flex:0 0 auto;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 16px;
+  font-size:1.1rem;font-weight:900;
+  border-left:3px solid var(--black);
+  background:var(--light);
+}
+.result-card:hover .result-arrow{background:var(--black);color:var(--yellow)}
+
+/* ============================================================
+   SKELETON
+   ============================================================ */
+.skeleton{
+  display:flex;flex-direction:column;gap:10px;
+  margin-top:22px;
+}
+.skeleton[hidden]{display:none}
+.skel-card{
+  display:flex;align-items:stretch;
+  border:3px solid var(--black);border-radius:16px;
+  background:var(--white);overflow:hidden;
+  box-shadow:4px 4px 0 var(--black);
+  height:92px;
+}
+.skel-thumb{
+  flex:0 0 100px;width:100px;
+  background:linear-gradient(90deg,#eee 25%,#e2e2e2 50%,#eee 75%);
+  background-size:200% 100%;animation:shim 1.4s infinite;
+  border-right:3px solid var(--black);
+}
+.skel-body{
+  flex:1 1 auto;
+  padding:16px;
+  display:flex;flex-direction:column;gap:10px;
+  justify-content:center;
+}
+.skel-line{
+  height:11px;background:linear-gradient(90deg,#eee 25%,#e2e2e2 50%,#eee 75%);
+  background-size:200% 100%;animation:shim 1.4s infinite;border-radius:6px;
+}
+.skel-line.w80{width:80%}
+.skel-line.w40{width:40%}
+@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ============================================================
+   DETAIL VIEW
+   ============================================================ */
+.detail-grid{
+  display:grid;
+  grid-template-columns:1.3fr 1fr;
+  gap:26px;align-items:start;
+}
+
+.player-card{
+  padding:20px;
+  background:var(--black);
+  border:3px solid var(--black);border-radius:var(--r-card);
+  box-shadow:var(--sh-card);
+  position:sticky;top:96px;
+}
+.player-card h3{
+  color:var(--yellow);font-size:.78rem;font-weight:900;
+  letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.player-card h3::before{
+  content:"";width:10px;height:10px;background:var(--yellow);
+  border-radius:50%;flex:none;
+}
+.player-frame{
+  position:relative;width:100%;aspect-ratio:16/9;
+  background:#111;border:3px solid var(--yellow);
+  border-radius:12px;overflow:hidden;
+}
+.player-frame iframe{
+  position:absolute;inset:0;width:100%;height:100%;
+  border:0;display:block;
+}
+.player-empty{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;color:rgba(255,255,255,.55);text-align:center;padding:20px;
+}
+.player-empty .big{font-size:2.6rem;line-height:1}
+.player-empty p{font-size:.86rem;font-weight:600;max-width:320px}
+.player-note{
+  margin-top:12px;font-size:.76rem;font-weight:500;color:rgba(255,255,255,.6);
+  line-height:1.5;
+}
+.player-current{
+  margin-top:12px;padding:10px 14px;
+  background:rgba(255,214,0,.15);
+  border:2px solid var(--yellow);border-radius:10px;
+  color:var(--yellow);font-size:.82rem;font-weight:800;
+  display:flex;align-items:center;gap:8px;
+  word-break:break-all;
+}
+.player-current[hidden]{display:none}
+
+.detail-info{
+  padding:24px;
+  background:var(--white);
+  border:3px solid var(--black);border-radius:var(--r-card);
+  box-shadow:var(--sh-card);
+}
+.detail-info h3{
+  font-size:clamp(1.05rem,2vw,1.25rem);
+  font-weight:900;letter-spacing:-.02em;line-height:1.35;
+}
+.detail-desc{
+  margin-top:14px;
+  font-size:.88rem;font-weight:500;color:var(--dark);line-height:1.6;
+  padding:14px 16px;
+  background:var(--light);
+  border:3px solid var(--black);border-radius:14px;
+  white-space:pre-wrap;word-break:break-word;
+  max-height:220px;overflow:auto;
+}
+.detail-desc:empty::before{content:"—";color:#999}
+
+.block{margin-top:22px}
+.block-title{
+  font-size:.74rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase;
+  margin-bottom:10px;display:flex;align-items:center;gap:8px;
+}
+.block-title::before{
+  content:"";width:10px;height:10px;background:var(--yellow);
+  border:2px solid var(--black);border-radius:3px;transform:rotate(45deg);
+  flex:none;
+}
+
+.stream-grid{display:flex;flex-direction:column;gap:8px}
+.stream-btn{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 16px;
+  background:var(--white);
+  border:3px solid var(--black);border-radius:12px;
+  box-shadow:2px 2px 0 var(--black);
+  color:var(--black);
+  font-size:.9rem;font-weight:800;
+  cursor:pointer;
+  transition:transform var(--t),box-shadow var(--t),background-color var(--t);
+  text-align:left;
+  width:100%;
+  font-family:inherit;
+}
+.stream-btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--black);background:var(--yellow)}
+.stream-btn.is-active{background:var(--yellow);transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--black)}
+.stream-btn .server-num{
+  flex:none;display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;font-size:.8rem;font-weight:900;
+  background:var(--black);color:var(--yellow);border-radius:8px;
+}
+.stream-btn .server-name{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stream-btn .server-play{
+  flex:none;font-size:.74rem;font-weight:900;letter-spacing:.06em;
+  padding:3px 8px;border:2px solid var(--black);border-radius:6px;
+  background:var(--white);
+}
+
+.dl-group{
+  margin-bottom:14px;
+  padding:14px;
+  background:var(--light);
+  border:3px solid var(--black);border-radius:14px;
+}
+.dl-group:last-child{margin-bottom:0}
+.dl-quality{
+  font-size:.84rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:10px;display:flex;align-items:center;gap:8px;
+}
+.dl-quality::before{
+  content:"";width:8px;height:8px;background:var(--yellow);
+  border:2px solid var(--black);border-radius:50%;flex:none;
+}
+.dl-links{display:flex;flex-direction:column;gap:6px}
+.dl-link{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 13px;
+  background:var(--white);
+  border:2px solid var(--black);border-radius:10px;
+  box-shadow:2px 2px 0 var(--black);
+  text-decoration:none;color:var(--black);
+  font-size:.84rem;font-weight:700;
+  transition:transform var(--t),box-shadow var(--t),background-color var(--t);
+  word-break:break-all;
+}
+.dl-link:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--black);background:var(--yellow)}
+.dl-link .host{
+  flex:none;padding:3px 9px;font-size:.66rem;font-weight:900;
+  background:var(--black);color:var(--yellow);border-radius:6px;
+  text-transform:uppercase;letter-spacing:.04em;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer{
+  background:var(--black);color:var(--white);
+  padding:40px 0;margin-top:20px;
+}
+.footer-inner{
+  display:flex;flex-wrap:wrap;align-items:center;
+  justify-content:space-between;gap:18px;
+}
+.footer-brand{display:flex;flex-direction:column;gap:6px}
+.footer-brand .logo{color:var(--white)}
+.footer-brand .logo-text{color:var(--white)}
+.footer-brand p{font-size:.9rem;font-weight:500;color:rgba(255,255,255,.7)}
+.footer-links{display:flex;flex-wrap:wrap;gap:14px}
+.footer-links a{
+  padding:9px 14px;font-size:.86rem;font-weight:700;
+  text-decoration:none;color:var(--white);
+  border:3px solid var(--white);border-radius:12px;
+  transition:background-color var(--t),color var(--t),transform var(--t);
+}
+.footer-links a:hover{
+  background:var(--yellow);color:var(--black);border-color:var(--yellow);
+  transform:translate(-1px,-1px);
+}
+
+/* ============================================================
+   ICONS (CSS ONLY)
+   ============================================================ */
+.ico{position:relative;display:block;flex:none}
+
+.ico-search{width:18px;height:18px}
+.ico-search .lens{
+  position:absolute;left:0;top:0;width:13px;height:13px;
+  border:3px solid var(--black);border-radius:50%;
+}
+.ico-search .handle{
+  position:absolute;right:0;bottom:0;width:3px;height:8px;
+  background:var(--black);border-radius:2px;transform:rotate(-45deg);
+  transform-origin:bottom right;
+}
+
+/* ============================================================
+   ANIMATION
+   ============================================================ */
+@keyframes rise{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:none}
+}
+.hero-inner > *{animation:rise .55s ease both}
+.hero-inner > *:nth-child(2){animation-delay:.06s}
+.hero-inner > *:nth-child(3){animation-delay:.12s}
+.hero-inner > *:nth-child(4){animation-delay:.18s}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1100px){
+  .detail-grid{grid-template-columns:1fr}
+  .player-card{position:static}
+}
+@media (max-width:900px){
+  .hero-deco{display:none}
+  .hero-inner{max-width:720px}
+}
+@media (max-width:640px){
+  .wrap{padding:0 16px}
+  .section{padding:44px 0}
+  .hero{padding:44px 0 52px}
+  .search-form{padding:10px;gap:6px}
+  .search-form .btn{width:100%;padding:11px 18px}
+  .header-back{padding:8px 12px;font-size:.82rem}
+  .detail-info{padding:20px}
+  .player-card{padding:16px}
+
+  .result-thumb{flex:0 0 84px;width:84px;min-height:82px}
+  .result-body{padding:10px 12px;gap:5px}
+  .result-title{font-size:.76rem}
+  .result-arrow{padding:0 12px;font-size:1rem}
+
+  .skel-card{height:82px}
+  .skel-thumb{flex:0 0 84px;width:84px}
+}
+@media (max-width:420px){
+  .wrap{padding:0 14px}
+  .header-inner{min-height:66px}
+  .logo-mark{width:33px;height:33px;font-size:.95rem}
+  .logo-text{font-size:1.1rem}
+  .btn{padding:13px 18px;font-size:.95rem}
+
+  .section-head h2{font-size:1.3rem}
+  .section-head p{font-size:.84rem}
+
+  .result-thumb{flex:0 0 72px;width:72px;min-height:72px}
+  .result-body{padding:9px 10px;gap:4px}
+  .result-title{font-size:.72rem;line-height:1.35}
+  .result-arrow{padding:0 9px;font-size:.9rem}
+  .tag{font-size:.52rem;padding:2px 6px}
+
+  .skel-card{height:72px}
+  .skel-thumb{flex:0 0 72px;width:72px}
+}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="logo" href="https://yudatools.vercel.app/" aria-label="YudaTools — home">
+      <span class="logo-mark" aria-hidden="true">Y</span>
+      <span class="logo-text">YudaTools</span>
+    </a>
+    <a class="header-back" href="https://yudatools.vercel.app/">
+      ← Back to YudaTools
+    </a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <section class="hero">
+    <div class="wrap hero-wrap">
+      <div class="hero-inner">
+        <span class="badge badge-live">⚡ LIVE SCRAPER</span>
+        <h1>Nekopoi <span class="hl">Search & Stream.</span></h1>
+        <p class="hero-sub">
+          Cari judul, lihat detail, dan streaming langsung dari browser.
+          Powered by <b>SankaVollerei API</b> + <b>Playmogo Player</b>.
+        </p>
+        <div class="hero-meta">
+          <span class="chip"><span class="dot" aria-hidden="true"></span> LIVE • SankaVollerei</span>
+          <span class="chip dark">🎬 PLAY MOGO</span>
+        </div>
+      </div>
+
+      <div class="hero-deco" aria-hidden="true">
+        <span class="deco deco-1"></span>
+        <span class="deco deco-2"></span>
+        <span class="deco deco-3"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SEARCH
+       ============================================================ -->
+  <section class="section" id="search">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num num-live">01 — SEARCH</span>
+        <h2>Cari Judul</h2>
+        <p>Masukkan kata kunci untuk mencari.</p>
+      </div>
+
+      <form class="search-form" id="searchForm" autocomplete="off" novalidate>
+        <input class="search-input" id="q" type="search"
+               placeholder="Contoh: waguri, kuroinu, dll..."
+               spellcheck="false" />
+        <button class="btn btn-primary" type="submit" id="searchBtn">
+          <span class="ico ico-search" aria-hidden="true">
+            <span class="lens"></span><span class="handle"></span>
+          </span>
+          <span>Search</span>
+        </button>
+      </form>
+
+      <div class="status" id="searchStatus" hidden aria-live="polite"></div>
+
+      <div class="skeleton" id="skeleton" hidden>
+        <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line w80"></div><div class="skel-line w40"></div></div></div>
+        <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line w80"></div><div class="skel-line w40"></div></div></div>
+        <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line w80"></div><div class="skel-line w40"></div></div></div>
+        <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line w80"></div><div class="skel-line w40"></div></div></div>
+      </div>
+
+      <div class="results-list" id="resultsList"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       DETAIL + PLAYER
+       ============================================================ -->
+  <section class="section" id="detail" hidden>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num">02 — DETAIL</span>
+        <h2 id="detailTitle">Detail</h2>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
+        <button class="btn btn-secondary btn-sm" id="backBtn" type="button">
+          ← Back to results
+        </button>
+        <a class="btn btn-secondary btn-sm" id="openOriginal"
+           target="_blank" rel="noopener noreferrer">
+          Open Original ↗
+        </a>
+      </div>
+
+      <div class="status" id="detailStatus" hidden aria-live="polite"></div>
+
+      <div class="detail-grid" id="detailGrid"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <a class="logo" href="https://yudatools.vercel.app/">
+        <span class="logo-mark" aria-hidden="true">Y</span>
+        <span class="logo-text">YudaTools</span>
+      </a>
+      <p>Simple tools. Built for everyone.</p>
+    </div>
+    <div class="footer-links">
+      <a href="https://nekopoi.care" target="_blank" rel="noopener noreferrer">
+        nekopoi.care ↗
+      </a>
+      <a href="https://wa.me/6289653185050" target="_blank" rel="noopener noreferrer">
+        Request via WhatsApp →
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   NEKOPOI SCRAPER — client-side, SankaVollerei API
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var API_BASE = 'https://www.sankavollerei.web.id/anime/nekopoi';
+
+  var PROXIES = [
+    { name: 'direct',     build: function (u) { return u; } },
+    { name: 'allorigins', build: function (u) { return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); } },
+    { name: 'corsproxy',  build: function (u) { return 'https://corsproxy.io/?url=' + encodeURIComponent(u); } },
+    { name: 'codetabs',   build: function (u) { return 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u); } },
+    { name: 'thingproxy', build: function (u) { return 'https://thingproxy.freeboard.io/fetch/' + u; } }
+  ];
+
+  var TIMEOUT_MS = 8000;
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  var els = {
+    form:      $('#searchForm'),
+    q:         $('#q'),
+    searchBtn: $('#searchBtn'),
+    searchSt:  $('#searchStatus'),
+    list:      $('#resultsList'),
+    skel:      $('#skeleton'),
+    detail:    $('#detail'),
+    detailTtl: $('#detailTitle'),
+    detailGrid:$('#detailGrid'),
+    detailSt:  $('#detailStatus'),
+    back:      $('#backBtn'),
+    open:      $('#openOriginal')
+  };
+
+  var state = { query: '' };
+
+  function esc(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+    });
+  }
+
+  function showStatus(el, type, html){
+    el.className = 'status ' + type;
+    el.innerHTML = html;
+    el.hidden = false;
+  }
+  function hideStatus(el){
+    el.hidden = true;
+    el.className = 'status';
+    el.innerHTML = '';
+  }
+
+  function setLoading(btn, on, txt){
+    if (!btn) return;
+    if (on){
+      if (!btn.dataset.orig) btn.dataset.orig = btn.innerHTML;
+      btn.innerHTML = txt || 'Loading...';
+      btn.disabled = true;
+    } else {
+      if (btn.dataset.orig) btn.innerHTML = btn.dataset.orig;
+      btn.disabled = false;
+    }
+  }
+
+  function fetchWithTimeout(url, ms){
+    return new Promise(function (resolve, reject) {
+      var controller = new AbortController();
+      var timer = setTimeout(function () {
+        controller.abort();
+        reject(new Error('Timeout ' + ms + 'ms'));
+      }, ms);
+
+      fetch(url, {
+        method: 'GET',
+        cache: 'no-store',
+        signal: controller.signal,
+        headers: { 'Accept': 'application/json, text/plain, */*' }
+      })
+      .then(function (res) { clearTimeout(timer); resolve(res); })
+      .catch(function (err) { clearTimeout(timer); reject(err); });
+    });
+  }
+
+  async function fetchJSON(targetUrl){
+    var lastErr = null;
+
+    for (var i = 0; i < PROXIES.length; i++){
+      var proxy = PROXIES[i];
+      var url = proxy.build(targetUrl);
+
+      try {
+        console.log('[nekopoi] trying proxy:', proxy.name);
+
+        var res = await fetchWithTimeout(url, TIMEOUT_MS);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+
+        var text = await res.text();
+        if (!text || text.length < 10) throw new Error('Empty response');
+
+        var json;
+        try { json = JSON.parse(text); }
+        catch (e) { throw new Error('Invalid JSON'); }
+
+        console.log('[nekopoi] ✅ success via', proxy.name);
+        return json;
+
+      } catch (err) {
+        console.warn('[nekopoi] ❌ ' + proxy.name + ' failed:', err.message);
+        lastErr = err;
+      }
+    }
+
+    throw new Error('Semua proxy gagal. Terakhir: ' + (lastErr ? lastErr.message : 'unknown'));
+  }
+
+  async function apiSearch(query){
+    var url = API_BASE + '/search?q=' + encodeURIComponent(query) + '&page=1';
+    console.log('[nekopoi] search:', url);
+
+    var data = await fetchJSON(url);
+    if (!data || data.status !== 'success' || !Array.isArray(data.data)){
+      throw new Error('API response tidak valid.');
+    }
+    return data.data;
+  }
+
+  async function apiEpisode(slug){
+    var url = API_BASE + '/episode/' + encodeURIComponent(slug);
+    console.log('[nekopoi] episode:', url);
+
+    var data = await fetchJSON(url);
+    if (!data || data.status !== 'success' || !data.data){
+      throw new Error('Episode tidak ditemukan.');
+    }
+    return data.data;
+  }
+
+  function renderResults(results){
+    els.list.innerHTML = '';
+
+    if (!results || !results.length){
+      showStatus(els.searchSt, 'error',
+        '<strong>Tidak ada hasil</strong>Query: <code>' + esc(state.query) + '</code>');
+      return;
+    }
+
+    showStatus(els.searchSt, 'success',
+      '<strong>✅ ' + results.length + ' hasil ditemukan</strong>' +
+      'Query: <code>' + esc(state.query) + '</code>'
+    );
+
+    var frag = document.createDocumentFragment();
+
+    results.forEach(function (r) {
+      var card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'result-card';
+
+      var thumbHTML = r.image
+        ? '<img src="' + esc(r.image) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">'
+        : '';
+      var fallbackHTML = '<span class="fallback" aria-hidden="true">🐾</span>';
+
+      var tags = '';
+      if (r.genres && Array.isArray(r.genres) && r.genres.length){
+        tags += '<span class="tag y">' + esc(r.genres.slice(0, 3).join(', ')) + '</span>';
+      }
+
+      card.innerHTML =
+        '<div class="result-thumb">' + thumbHTML + (r.image ? '' : fallbackHTML) + '</div>' +
+        '<div class="result-body">' +
+          '<div class="result-title">' + esc(r.title || '-') + '</div>' +
+          (tags ? '<div class="result-meta">' + tags + '</div>' : '') +
+        '</div>' +
+        '<span class="result-arrow" aria-hidden="true">→</span>';
+
+      card.addEventListener('click', function () {
+        loadDetail(r.slug || r.url);
+      });
+
+      frag.appendChild(card);
+    });
+
+    els.list.appendChild(frag);
+  }
+
+  function renderDetail(ep){
+    els.detailTtl.textContent = ep.title || 'Detail';
+    els.open.href = 'https://nekopoi.care/' + (ep.slug || '');
+
+    var streams = Array.isArray(ep.streams) ? ep.streams : [];
+    var downloads = Array.isArray(ep.downloads) ? ep.downloads : [];
+
+    var streamsHTML = '';
+    if (streams.length){
+      streamsHTML =
+        '<div class="block">' +
+          '<div class="block-title">Streaming Servers (' + streams.length + ')</div>' +
+          '<div class="stream-grid">' +
+            streams.map(function (s, i) {
+              var name = s.server || ('Server ' + (i+1));
+              var url = s.url || '';
+              return '<button type="button" class="stream-btn" data-url="' + esc(url) + '" data-server="' + esc(name) + '">' +
+                '<span class="server-num">' + (i+1) + '</span>' +
+                '<span class="server-name">' + esc(name) + '</span>' +
+                '<span class="server-play">▶ PLAY</span>' +
+              '</button>';
+            }).join('') +
+          '</div>' +
+        '</div>';
+    }
+
+    var downloadsHTML = '';
+    if (downloads.length){
+      downloadsHTML =
+        '<div class="block">' +
+          '<div class="block-title">Download Links (' + downloads.length + ')</div>' +
+          downloads.map(function (d) {
+            var links = Array.isArray(d.links) ? d.links : [];
+            return '<div class="dl-group">' +
+              '<div class="dl-quality">' + esc(d.quality || 'Default') + '</div>' +
+              '<div class="dl-links">' +
+                links.map(function (l) {
+                  return '<a class="dl-link" href="' + esc(l.url || '#') + '" target="_blank" rel="noopener noreferrer">' +
+                    '<span class="host">' + esc(l.host || 'Link') + '</span>' +
+                    '<span>' + esc(l.url || '') + '</span>' +
+                  '</a>';
+                }).join('') +
+              '</div>' +
+            '</div>';
+          }).join('') +
+        '</div>';
+    }
+
+    var descHTML = ep.description
+      ? '<div class="detail-desc">' + esc(ep.description) + '</div>'
+      : '';
+
+    var playerHTML =
+      '<div class="player-card">' +
+        '<h3>🎬 Playmogo Player</h3>' +
+        '<div class="player-frame" id="playerFrame">' +
+          '<div class="player-empty">' +
+            '<span class="big">🎬</span>' +
+            '<p>Pilih server streaming di panel kanan untuk memutar video.</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="player-current" id="playerCurrent" hidden></div>' +
+        '<p class="player-note">Video di-embed langsung dari server. Klik server untuk mulai memutar.</p>' +
+      '</div>';
+
+    els.detailGrid.innerHTML =
+      playerHTML +
+      '<div class="detail-info">' +
+        '<h3>' + esc(ep.title || '(tanpa judul)') + '</h3>' +
+        descHTML +
+        streamsHTML +
+        downloadsHTML +
+      '</div>';
+
+    $$('.stream-btn', els.detailGrid).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var url = btn.getAttribute('data-url');
+        var server = btn.getAttribute('data-server');
+        $$('.stream-btn', els.detailGrid).forEach(function (b) {
+          b.classList.remove('is-active');
+        });
+        btn.classList.add('is-active');
+        loadPlayer(url, server);
+      });
+    });
+
+    var firstBtn = $('.stream-btn', els.detailGrid);
+    if (firstBtn) firstBtn.click();
+  }
+
+  function loadPlayer(url, server){
+    var frame = $('#playerFrame');
+    var current = $('#playerCurrent');
+    if (!frame) return;
+
+    if (!url){
+      frame.innerHTML =
+        '<div class="player-empty">' +
+          '<span class="big">⚠️</span>' +
+          '<p>URL streaming tidak tersedia untuk server ini.</p>' +
+        '</div>';
+      if (current) current.hidden = true;
+      return;
+    }
+
+    frame.innerHTML =
+      '<iframe src="' + esc(url) + '" ' +
+        'allow="autoplay; fullscreen; encrypted-media; picture-in-picture" ' +
+        'allowfullscreen loading="lazy" ' +
+        'referrerpolicy="no-referrer">' +
+      '</iframe>';
+
+    if (current){
+      current.hidden = false;
+      current.innerHTML = '▶ Now playing: <span>' + esc(server || 'Server') + '</span>';
+    }
+  }
+
+  async function doSearch(query){
+    state.query = query;
+
+    hideStatus(els.searchSt);
+    hideStatus(els.detailSt);
+    els.detail.hidden = true;
+    els.list.innerHTML = '';
+    els.skel.hidden = false;
+    setLoading(els.searchBtn, true, 'Loading...');
+
+    try {
+      var results = await apiSearch(query);
+      els.skel.hidden = true;
+      renderResults(results);
+    } catch (e) {
+      els.skel.hidden = true;
+      console.error('[nekopoi] search error:', e);
+      showStatus(els.searchSt, 'error',
+        '<strong>Gagal search</strong>' + esc(e.message)
+      );
+    } finally {
+      setLoading(els.searchBtn, false);
+    }
+  }
+
+  async function loadDetail(slugOrUrl){
+    var slug = String(slugOrUrl || '').trim();
+
+    if (/^https?:\/\//i.test(slug)){
+      try {
+        var u = new URL(slug);
+        var parts = u.pathname.split('/').filter(Boolean);
+        slug = parts[parts.length - 1] || slug;
+      } catch (e) {}
+    }
+    slug = slug.replace(/^\/+/, '').replace(/\/$/, '');
+
+    els.detail.hidden = false;
+    els.detailGrid.innerHTML = '';
+    els.open.href = 'https://nekopoi.care/' + slug;
+    hideStatus(els.detailSt);
+    showStatus(els.detailSt, 'loading', '<strong>Memuat detail...</strong>Menghubungkan ke SankaVollerei API.');
+
+    setTimeout(function () {
+      els.detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 60);
+
+    try {
+      var ep = await apiEpisode(slug);
+      hideStatus(els.detailSt);
+      renderDetail(ep);
+    } catch (e) {
+      console.error('[nekopoi] detail error:', e);
+      showStatus(els.detailSt, 'error',
+        '<strong>Gagal memuat detail</strong>' + esc(e.message)
+      );
+    }
+  }
+
+  els.form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    var q = (els.q.value || '').trim();
+    if (!q){
+      showStatus(els.searchSt, 'error', '<strong>Query kosong</strong>Masukkan kata kunci terlebih dahulu.');
+      els.q.focus();
+      return false;
+    }
+
+    doSearch(q);
+    return false;
+  });
+
+  els.back.addEventListener('click', function () {
+    els.detail.hidden = true;
+    els.list.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  console.log('[nekopoi] ready. API:', API_BASE);
+})();
+</script>
+</body>
+</html>
