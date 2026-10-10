@@ -3,6 +3,26 @@
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
     { "source": "/amprem", "destination": "/amprem.html" },
-    { "source": "/nekopoi", "destination": "/nekopoi.html"}
+    { "source": "/nekopoi", "destination": "/nekopoi.html" },
+    { "source": "/ytmusic", "destination": "/ytmusic.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "autoplay=*, fullscreen=*, encrypted-media=*, picture-in-picture=*"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
+      ]
+    }
   ]
 }
